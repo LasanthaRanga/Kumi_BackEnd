@@ -9,7 +9,8 @@ const multer = require('multer');
 var appRoot = require('app-root-path');
 
 // const uppath = "./uploads";
-const uppath = "../siraads.com/uploads";
+
+const uppath = "../testing.probox.lk/uploads";
 const downpath = "https://www.coopshop.lk/uploads/profile/";
 
 const storage = multer.diskStorage({
