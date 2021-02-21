@@ -1,0 +1,9 @@
+{
+    "env": {
+        "JWT_KEY": "secret",
+        "host": "localhost",
+        "user": "root",
+        "password": "root",
+        "database": "kumi"
+    }
+}
