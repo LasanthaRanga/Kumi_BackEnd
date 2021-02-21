@@ -31,7 +31,9 @@ const allowedOrigins = [
     'http://localhost:8080',
     'http://localhost:8100',
     'https://api.smartwin.lk',
-    'http://api.smartwin.lk'
+    'http://api.smartwin.lk',
+    'http://testing.probox.lk',
+    'https://testing.probox.lk',
 
 ];
 
