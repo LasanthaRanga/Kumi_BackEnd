@@ -329,7 +329,7 @@ exports.update = (req, res, next) => {
         res.send({ "ok": "updated" });
 
         setTimeout(() => {
-            this.sendLoginInformation(req.body.udata[0].userId);
+         //   this.sendLoginInformation(req.body.udata[0].userId);
         }, 2000);
 
     } catch (error) {
