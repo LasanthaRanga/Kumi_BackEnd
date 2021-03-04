@@ -17,6 +17,7 @@ const invoiceRout = require('./routers/invoice');
 const catRouter = require('./routers/cat');
 const addRouter = require('./routers/add');
 const addUpRouter = require('./routers/addUpload');
+const mlRout = require('./routers/mlRout');
 
 const allowedOrigins = [
     '*',
@@ -64,6 +65,7 @@ app.use('/invoice', invoiceRout);
 app.use('/cat', catRouter);
 app.use('/add', addRouter);
 app.use('/addUp', addUpRouter);
+app.use('/mlRout', mlRout);
 
 app.use((req, res, next) => {
     const error = new Error('Not Found');

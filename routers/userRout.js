@@ -32,6 +32,7 @@ router.post("/singalMessage", user.singalMessage);
 
 //online registration
 router.post("/onreg", user.checkForEmptyPinAndRegister);
+router.post("/signUpPersanal", user.signUpPersanal);
 
 
 //KUMI

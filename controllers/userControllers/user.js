@@ -379,32 +379,70 @@ exports.singalMessage = (req, res, next) => {
 exports.checkForEmptyPinAndRegister = (req, res, next) => {
     let q = "SELECT sw_tree.swTreeId,sw_tree.parentId,sw_tree.A,sw_tree.B,sw_tree.userId,sw_tree.commitionId,sw_tree.APoint,sw_tree.BPoint,sw_tree.layar,sw_tree.`status`,sw_tree.userName,sw_tree.other1,sw_tree.other2 FROM sw_tree WHERE sw_tree.swTreeId= " + req.body.ref;
     mycon.execute(q, (er, ro, fi) => {
+        mycon.execute("SELECT sw_commition.idCommition,sw_commition.register_date,sw_commition.userId,sw_commition.introducerid,sw_commition.introducerCommitionId,sw_commition.`status` FROM sw_commition WHERE sw_commition.userId='" + req.body.intro + "' ORDER BY sw_commition.idCommition ASC", (ee, rr, ff) => {
+            let obj = {
+                mg: '',
+                message: ''
+            };
 
-        let obj = {
-            mg: ''
-        }
-        if (!er) {
-            if (ro[0]) {
-                if (ro[0].A == null) {
-                    console.log('AAAAA');
-                    obj.mg = 'A';
-                    req.body.side = 'A';
-                    this.signUpOnline(req.body);
-                } else if (ro[0].B == null) {
-                    console.log('BBBBB');
-                    obj.mg = 'B';
-                    req.body.side = 'B';
-                    this.signUpOnline(req.body);
+            if (!er && !ee) {
+                console.log("not error")
+                if (ro[0] && rr[0]) {
+                    console.log("not null")
+                    mycon.execute("SELECT `user`.email,`user`.mobileno FROM `user` WHERE `user`.email='" + req.body.email + "'", (e, r, f) => {
+                        if (!e) {
+
+                            if (r[0] != null) {
+                                console.log(r);
+                                obj.mg = 'no';
+                                obj.message = "Email Address Is Already Exist";
+                                res.send(obj);
+                                return;
+                            } else {
+                                console.log("ela");
+                                let introCom = rr[0].idCommition;
+                                if (ro[0].A == null) {
+                                    console.log('AAAAA');
+                                    obj.mg = 'A';
+                                    req.body.side = 'A';
+                                    req.body.introCom = introCom;
+                                    this.signUpOnline(req.body);
+                                } else if (ro[0].B == null) {
+                                    console.log('BBBBB');
+                                    obj.mg = 'B';
+                                    req.body.side = 'B';
+                                    req.body.introCom = introCom;
+                                    this.signUpOnline(req.body);
+                                } else {
+                                    console.log('======');
+                                    obj.mg = 'no';
+                                    obj.message = "Referance Number is Wrong"
+                                    res.send(obj);
+                                    return;
+                                }
+
+                            }
+                        } else {
+                            console.log(e);
+                            obj.mg = 'no';
+                            obj.message = "Introducer Number is Wrong"
+                            res.send(obj);
+                            return;
+                        }
+                    });
                 } else {
-                    console.log('======');
                     obj.mg = 'no';
+                    obj.message = "Introducer Number is Wrong"
+                    console.log('null');
+                    res.send(obj);
+                    return;
                 }
+
+            } else {
+                console.log(er);
+                res.send(er);
             }
-            res.send(obj);
-        } else {
-            console.log(er);
-            res.send(er);
-        }
+        });
     });
 }
 
@@ -417,10 +455,24 @@ exports.signUpOnline = (parm) => {
         if (err) {
             return status(500).json({ error: err });
         } else {
-            let q = "INSERT INTO `user` (`email`,`pword`,`mobileno`,`authcode`,`status`,`dateTime`,`utypeId`) VALUES ('" + parm.email + "','" + hash + "','" + parm.mobile + "','" + val + "',0,'" + day + "',4)";
+
+
+
+            let q = "INSERT INTO `user` (`email`,`pword`,`mobileno`,`authcode`,`status`,`dateTime`,`utypeId`) VALUES ('" + parm.email + "','" + hash + "','" + parm.mobile + "','" + val + "',1,'" + day + "',3)";
             mycon.execute(q, (er, rr, fi) => {
+
                 if (!er) {
                     userID = rr.insertId;
+
+                    mycon.execute("INSERT INTO `sw_commition`(`register_date`, `userId`, `introducerid`, `introducerCommitionId`, `status`) " +
+                        " VALUES ('" + day + "', " + userID + ", " + parm.intro + ", " + parm.introCom + ", 1)", (e, r, f) => {
+                            if (!e) {
+                                //  console.log(ro);
+                            } else {
+                                console.log(r)
+                            }
+                        }
+                    );
 
                     let q = "INSERT INTO  `uservalue`(  `userId`, `keyId`, `value`, `valueStatus`) VALUES (  " + userID + ",1, '', 1)";
                     mycon.execute(q, (er, ro, fi) => {
@@ -546,6 +598,37 @@ exports.signUpOnline = (parm) => {
 }
 
 
+
+
+exports.signUpPersanal = (req, res, next) => {
+    var day = dateFormat(new Date(), "yyyy-mm-dd h:MM:ss");
+    var val = Math.floor(1000 + Math.random() * 9000);
+
+    mycon.execute("SELECT `user`.email,`user`.mobileno FROM `user` WHERE `user`.email='" + req.body.email + "'", (e, r, f) => {
+        if (!e) {
+            if (r[0] != null) {
+                let obj = { "mg": "no", "message": "Email Address Is Already Exist" };
+                res.send(obj);
+            } else {
+                bcript.hash(req.body.pword, 10, (err, hash) => {
+                    if (err) {
+                        return status(500).json({ error: err });
+                    } else {
+                        let q = "INSERT INTO `user` (`email`,`pword`,`mobileno`,`authcode`,`status`,`dateTime`,`utypeId`) VALUES ('" + req.body.email + "','" + hash + "','" + req.body.mobile + "','" + val + "',1,'" + day + "',4)";
+                        mycon.execute(q, (er, rr, fi) => {
+                            if (!er) {
+                                userID = rr.insertId;
+                                res.send(rr);
+                            }
+                        });
+                    }
+                });
+            }
+        } else {
+            console.log(e);
+        }
+    });
+}
 
 // forgetPassword
 
