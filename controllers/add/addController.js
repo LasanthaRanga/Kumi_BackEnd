@@ -227,11 +227,11 @@ exports.calPoints = async (tid, addid) => {
         var day = dateFormat(new Date(), "yyyy-mm-dd h:MM:ss");
         mycon.execute("SELECT tree.idTree,tree.parent,tree.layer,tree.userId,tree.`status` FROM tree WHERE idTree = " + tid, (error, rows, fildData) => {
             if (!error) {
-            
+
                 mycon.execute("SELECT `level`.`level`,`level`.cost FROM `level` WHERE `level`.`status`= 1 ORDER BY `level`.`level` ASC", (e, r, f) => {
                     if (!e) {
                         points = r;
-                    
+
                         let userId = rows[0].userId;
                         let parent = rows[0].parent;
                         let pp = 0;
@@ -244,7 +244,7 @@ exports.calPoints = async (tid, addid) => {
                             "  VALUES( " + userId + ", " + tid + ", " + addid + "," + cost + ", " + level + ", 1, '" + day + "')";
                         mycon.execute(qqq, (eee, rrr, fildData) => {
                             if (!error) {
-                              
+
                             } else {
                                 console.log(eee);
                             }
@@ -257,7 +257,7 @@ exports.calPoints = async (tid, addid) => {
 
                         mycon.execute(query + parent, (ee, r1, ff) => {
                             if (!ee) {
-                              
+
                                 if (r1.length > 0) {
                                     let uid = r1[0].userId;
                                     let treeId = r1[0].idTree;
@@ -265,153 +265,160 @@ exports.calPoints = async (tid, addid) => {
                                     parent = r1[0].parent;
                                     if (status == 1) {
                                         this.addPoints(uid, treeId, addid, cost, level, day);
+                                    }
 
-                                        cost = points[2].cost;
-                                        level = points[2].level
+                                    cost = points[2].cost;
+                                    level = points[2].level
 
-                                        mycon.execute(query + parent, (ee, r2, ff) => {
-                                            if (!ee) {
-                                              
-                                                if (r2.length > 0) {
-                                                    uid = r2[0].userId;
-                                                    treeId = r2[0].idTree;
-                                                    status = r2[0].status;
-                                                    parent = r2[0].parent;
-                                                    if (status == 1) {
-                                                        this.addPoints(uid, treeId, addid, cost, level, day);
-                                                        cost = points[3].cost;
-                                                        level = points[3].level
-                                                        //-------------- 3
-                                                        mycon.execute(query + parent, (ee, r3, ff) => {
-                                                            if (!ee) {
-                                                              
-                                                                if (r3.length > 0) {
-                                                                    uid = r3[0].userId;
-                                                                    treeId = r3[0].idTree;
-                                                                    status = r3[0].status;
-                                                                    parent = r3[0].parent;
-                                                                    if (status == 1) {
-                                                                        this.addPoints(uid, treeId, addid, cost, level, day);
-                                                                        cost = points[4].cost;
-                                                                        level = points[4].level
-                                                                        //------------ 4
+                                    mycon.execute(query + parent, (ee, r2, ff) => {
+                                        if (!ee) {
 
-                                                                        mycon.execute(query + parent, (ee, r4, ff) => {
+                                            if (r2.length > 0) {
+                                                uid = r2[0].userId;
+                                                treeId = r2[0].idTree;
+                                                status = r2[0].status;
+                                                parent = r2[0].parent;
+                                                if (status == 1) {
+                                                    this.addPoints(uid, treeId, addid, cost, level, day);
+                                                }
+                                                cost = points[3].cost;
+                                                level = points[3].level
+                                                //-------------- 3
+                                                mycon.execute(query + parent, (ee, r3, ff) => {
+                                                    if (!ee) {
+
+                                                        if (r3.length > 0) {
+                                                            uid = r3[0].userId;
+                                                            treeId = r3[0].idTree;
+                                                            status = r3[0].status;
+                                                            parent = r3[0].parent;
+                                                            if (status == 1) {
+                                                                this.addPoints(uid, treeId, addid, cost, level, day);
+                                                            }
+                                                            cost = points[4].cost;
+                                                            level = points[4].level
+                                                            //------------ 4
+
+                                                            mycon.execute(query + parent, (ee, r4, ff) => {
+                                                                if (!ee) {
+
+                                                                    if (r4.length > 0) {
+                                                                        uid = r4[0].userId;
+                                                                        treeId = r4[0].idTree;
+                                                                        status = r4[0].status;
+                                                                        parent = r4[0].parent;
+                                                                        if (status == 1) {
+                                                                            this.addPoints(uid, treeId, addid, cost, level, day);
+                                                                        }
+                                                                        cost = points[5].cost;
+                                                                        level = points[5].level
+                                                                        //============= 5
+
+                                                                        mycon.execute(query + parent, (ee, r5, ff) => {
                                                                             if (!ee) {
-                                                                             
-                                                                                if (r4.length > 0) {
-                                                                                    uid = r4[0].userId;
-                                                                                    treeId = r4[0].idTree;
-                                                                                    status = r4[0].status;
-                                                                                    parent = r4[0].parent;
+
+                                                                                if (r5.length > 0) {
+                                                                                    uid = r5[0].userId;
+                                                                                    treeId = r5[0].idTree;
+                                                                                    status = r5[0].status;
+                                                                                    parent = r5[0].parent;
                                                                                     if (status == 1) {
                                                                                         this.addPoints(uid, treeId, addid, cost, level, day);
-                                                                                        cost = points[5].cost;
-                                                                                        level = points[5].level
-                                                                                        //============= 5
-
-                                                                                        mycon.execute(query + parent, (ee, r5, ff) => {
-                                                                                            if (!ee) {
-                                                                                           
-                                                                                                if (r5.length > 0) {
-                                                                                                    uid = r5[0].userId;
-                                                                                                    treeId = r5[0].idTree;
-                                                                                                    status = r5[0].status;
-                                                                                                    parent = r5[0].parent;
-                                                                                                    if (status == 1) {
-                                                                                                        this.addPoints(uid, treeId, addid, cost, level, day);
-                                                                                                        cost = points[6].cost;
-                                                                                                        level = points[6].level
-                                                                                                        //--------------- 6
-
-                                                                                                        mycon.execute(query + parent, (ee, r6, ff) => {
-                                                                                                            if (!ee) {
-                                                                                                            
-                                                                                                                if (r6.length > 0) {
-                                                                                                                    uid = r6[0].userId;
-                                                                                                                    treeId = r6[0].idTree;
-                                                                                                                    status = r6[0].status;
-                                                                                                                    parent = r6[0].parent;
-                                                                                                                    if (status == 1) {
-                                                                                                                        this.addPoints(uid, treeId, addid, cost, level, day);
-                                                                                                                        cost = points[7].cost;
-                                                                                                                        level = points[7].level
-                                                                                                                        //--------------- 7
-
-
-                                                                                                                        mycon.execute(query + parent, (ee, r7, ff) => {
-                                                                                                                            if (!ee) {
-                                                                                                                               
-                                                                                                                                if (r7.length > 0) {
-                                                                                                                                    uid = r7[0].userId;
-                                                                                                                                    treeId = r7[0].idTree;
-                                                                                                                                    status = r7[0].status;
-                                                                                                                                    parent = r7[0].parent;
-                                                                                                                                    if (status == 1) {
-                                                                                                                                        this.addPoints(uid, treeId, addid, cost, level, day);
-                                                                                                                                        cost = points[8].cost;
-                                                                                                                                        level = points[8].level
-                                                                                                                                        //--------------- 8
-                                                                                                                                        //8 weni level eka start karanna one methanin
-
-
-
-                                                                                                                                    }
-                                                                                                                                } else {
-                                                                                                                                    console.log("nullllllllllllll 7");
-                                                                                                                                }
-                                                                                                                            } else {
-                                                                                                                                console.log(ee);
-                                                                                                                            }
-                                                                                                                        }); // ============================7
-
-                                                                                                                    }
-                                                                                                                } else {
-                                                                                                                    console.log("nullllllllllllll 6");
-                                                                                                                }
-                                                                                                            } else {
-                                                                                                                console.log(ee);
-                                                                                                            }
-                                                                                                        }); // ============================6
-
-                                                                                                    }
-                                                                                                } else {
-                                                                                                    console.log("nullllllllllllll 5");
-                                                                                                }
-                                                                                            } else {
-                                                                                                console.log(ee);
-                                                                                            }
-                                                                                        }); // ============================5
-
                                                                                     }
+                                                                                    cost = points[6].cost;
+                                                                                    level = points[6].level
+                                                                                    //--------------- 6
+
+                                                                                    mycon.execute(query + parent, (ee, r6, ff) => {
+                                                                                        if (!ee) {
+
+                                                                                            if (r6.length > 0) {
+                                                                                                uid = r6[0].userId;
+                                                                                                treeId = r6[0].idTree;
+                                                                                                status = r6[0].status;
+                                                                                                parent = r6[0].parent;
+                                                                                                if (status == 1) {
+                                                                                                    this.addPoints(uid, treeId, addid, cost, level, day);
+                                                                                                }
+                                                                                                cost = points[7].cost;
+                                                                                                level = points[7].level
+                                                                                                //--------------- 7
+
+
+                                                                                                mycon.execute(query + parent, (ee, r7, ff) => {
+                                                                                                    if (!ee) {
+
+                                                                                                        if (r7.length > 0) {
+                                                                                                            uid = r7[0].userId;
+                                                                                                            treeId = r7[0].idTree;
+                                                                                                            status = r7[0].status;
+                                                                                                            parent = r7[0].parent;
+                                                                                                            if (status == 1) {
+                                                                                                                this.addPoints(uid, treeId, addid, cost, level, day);
+                                                                                                            }
+                                                                                                            cost = points[8].cost;
+                                                                                                            level = points[8].level
+                                                                                                            //--------------- 8
+                                                                                                            //8 weni level eka start karanna one methanin
+
+
+
+
+                                                                                                        } else {
+                                                                                                            console.log("nullllllllllllll 7");
+                                                                                                        }
+                                                                                                    } else {
+                                                                                                        console.log(ee);
+                                                                                                    }
+                                                                                                }); // ============================7
+
+
+                                                                                            } else {
+                                                                                                console.log("nullllllllllllll 6");
+                                                                                            }
+                                                                                        } else {
+                                                                                            console.log(ee);
+                                                                                        }
+                                                                                    }); // ============================6
+
+
                                                                                 } else {
-                                                                                    console.log("nullllllllllllll 4");
+                                                                                    console.log("nullllllllllllll 5");
                                                                                 }
                                                                             } else {
                                                                                 console.log(ee);
                                                                             }
-                                                                        }); // ============================4
+                                                                        }); // ============================5
 
+
+                                                                    } else {
+                                                                        console.log("nullllllllllllll 4");
                                                                     }
                                                                 } else {
-                                                                    console.log("nullllllllllllll 3");
+                                                                    console.log(ee);
                                                                 }
-                                                            } else {
-                                                                console.log(ee);
-                                                            }
-                                                        }); // ============================3
+                                                            }); // ============================4
 
 
+                                                        } else {
+                                                            console.log("nullllllllllllll 3");
+                                                        }
+                                                    } else {
+                                                        console.log(ee);
                                                     }
-                                                } else {
-                                                    console.log("nullllllllllllll 2");
-                                                }
-                                            } else {
-                                                console.log(ee);
-                                            }
-                                        }); // ============================2
+                                                }); // ============================3
 
-                                    }
+
+
+                                            } else {
+                                                console.log("nullllllllllllll 2");
+                                            }
+                                        } else {
+                                            console.log(ee);
+                                        }
+                                    }); // ============================2
+
+
                                 } else {
                                     console.log("nullllllllllllll 1");
                                 }
@@ -443,7 +450,7 @@ exports.addPoints = (uid, tid, addid, amount, level, day) => {
             "  VALUES( " + uid + ", " + tid + ", " + addid + "," + amount + ", " + level + ", 1, '" + day + "')";
         mycon.execute(qq, (error, rows, fildData) => {
             if (!error) {
-              //  console.log(rows);
+                //  console.log(rows);
             } else {
                 console.log(error);
             }
