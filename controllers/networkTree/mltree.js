@@ -243,6 +243,23 @@ exports.getIncomeByUser = (req, res, next) => {
     }
 }
 
+exports.getIncomeAllUsers = (req, res, next) => {
+    try {
 
-// 
+        let q = "SELECT ml_commitions.idml_commitions,ml_commitions.userid,ml_commitions.treeid,ml_commitions.addid,Sum(ml_commitions.amount) as tot,ml_commitions.`level`,ml_commitions.`status`,ml_commitions.withdrawed,ml_commitions.withdrawid,`user`.email,uservalue.`value` FROM ml_commitions INNER JOIN `user` ON `user`.idUser=ml_commitions.userid INNER JOIN uservalue ON uservalue.userId=`user`.idUser WHERE ml_commitions.`status`=1 AND uservalue.keyId=2 GROUP BY ml_commitions.userid";
+        mycon.execute(q, (e, r, f) => {
+            if (!e) {
+                res.send(r);
+            } else {
+                console.log(e)
+            }
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send(error);
+    }
+}
+
+
+// SELECT ml_commitions.idml_commitions,ml_commitions.userid,ml_commitions.treeid,ml_commitions.addid,Sum(ml_commitions.amount),ml_commitions.`level`,ml_commitions.`status`,ml_commitions.withdrawed,ml_commitions.withdrawid,`user`.email,uservalue.`value` FROM ml_commitions INNER JOIN `user` ON `user`.idUser=ml_commitions.userid INNER JOIN uservalue ON uservalue.userId=`user`.idUser WHERE ml_commitions.`status`=1 AND uservalue.keyId=2 GROUP BY ml_commitions.userid
 
