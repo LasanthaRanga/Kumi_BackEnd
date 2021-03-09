@@ -93,7 +93,7 @@ exports.register = (req, res, next) => {
                                                 });
 
 
-                                                for (let i = 3; i < 22; i++) {
+                                                for (let i = 3; i < 23; i++) {
                                                     let q = "INSERT INTO  `uservalue`(  `userId`, `keyId`, `value`, `valueStatus`) VALUES (  " + userID + ", " + i + ", '', 1)";
                                                     mycon.execute(q, (er, ro, fi) => {
                                                         if (!er) {
