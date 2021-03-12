@@ -8,6 +8,8 @@ router.post("/register", mltree.register);
 router.post("/getTree", mltree.getTree);
 router.post("/getIncomeByUser", mltree.getIncomeByUser);
 router.post("/getIncomeAllUsers", mltree.getIncomeAllUsers);
+router.post("/findRef", mltree.findRef);
+router.post("/getTreeIdByUser", mltree.getTreeIdByUser);
 
 
 
