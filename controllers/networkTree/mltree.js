@@ -146,7 +146,7 @@ exports.addToTree = (param) => {
                 let layer = ref.layer + 1;
 
                 mycon.execute("INSERT INTO `tree` ( `parent`, `layer`, `userId`, `status`, `created`, `other1`, `other2`, `other3`, `string1`, `string2`, `string3` )"
-                    + " VALUES	( " + param.ref + ", " + layer + ", " + param.uid + ", 0, '" + day + "', NULL, NULL, NULL, NULL, NULL, NULL )", (ee, rr, ff) => {
+                    + " VALUES	( " + param.ref + ", " + layer + ", " + param.uid + ", 0, '" + day + "','/assets/images/no.png', NULL, NULL, NULL, NULL, NULL )", (ee, rr, ff) => {
                         if (!ee) {
                             console.log(rr);
                             return;
@@ -280,15 +280,120 @@ exports.findRef = (req, res, next) => {
 
 exports.getTreeIdByUser = (req, res, next) => {
     try {
-
-        let q = "SELECT tree.idTree FROM tree WHERE tree.userId=" + req.body.uid;
+        let arr = []
+        let q = "SELECT tree.idTree AS id,tree.parent AS pid,tree.idTree AS title,tree.layer,tree.userId,tree.other1 as img,tree.`status`,`user`.email,uservalue.`value` AS `name` FROM tree INNER JOIN `user` ON `user`.idUser=tree.userId INNER JOIN uservalue ON uservalue.userId=`user`.idUser WHERE uservalue.keyId=2 AND tree.userId=" + req.body.uid;
         mycon.execute(q, (e, r, f) => {
             if (!e) {
-                res.send(r);
+                arr.push(r[0]);
+                //one start
+                mycon.execute("SELECT tree.idTree AS id,tree.parent AS pid,tree.idTree AS title,tree.layer,tree.userId,tree.other1 as img,tree.`status`,`user`.email,uservalue.`value` AS `name` FROM tree INNER JOIN `user` ON `user`.idUser=tree.userId INNER JOIN uservalue ON uservalue.userId=`user`.idUser WHERE uservalue.keyId=2 AND tree.parent= " + r[0].id, (e1, r1, f) => {
+                    if (!e1) {
+                        r1.forEach(el1 => {
+                            arr.push(el1);
+                            // 2 start                            
+                            mycon.execute("SELECT tree.idTree AS id,tree.parent AS pid,tree.idTree AS title,tree.layer,tree.userId,tree.other1 as img,tree.`status`,`user`.email,uservalue.`value` AS `name` FROM tree INNER JOIN `user` ON `user`.idUser=tree.userId INNER JOIN uservalue ON uservalue.userId=`user`.idUser WHERE uservalue.keyId=2 AND tree.parent= " + el1.id, (e2, r2, f) => {
+                                if (!e2) {
+                                    r2.forEach(el2 => {
+                                        arr.push(el2);
+                                        // level 3
+                                        mycon.execute("SELECT tree.idTree AS id,tree.parent AS pid,tree.idTree AS title,tree.layer,tree.userId,tree.other1 as img,tree.`status`,`user`.email,uservalue.`value` AS `name` FROM tree INNER JOIN `user` ON `user`.idUser=tree.userId INNER JOIN uservalue ON uservalue.userId=`user`.idUser WHERE uservalue.keyId=2 AND tree.parent= " + el2.id, (e3, r3, f) => {
+                                            if (!e3) {
+                                                r3.forEach(el3 => {
+                                                    arr.push(el3);
+                                                    // level 4
+                                                    mycon.execute("SELECT tree.idTree AS id,tree.parent AS pid,tree.idTree AS title,tree.layer,tree.userId,tree.other1 as img,tree.`status`,`user`.email,uservalue.`value` AS `name` FROM tree INNER JOIN `user` ON `user`.idUser=tree.userId INNER JOIN uservalue ON uservalue.userId=`user`.idUser WHERE uservalue.keyId=2 AND tree.parent= " + el3.id, (e4, r4, f) => {
+                                                        if (!e4) {
+                                                            r4.forEach(el4 => {
+                                                                arr.push(el4);
+                                                                // level 5
+                                                                mycon.execute("SELECT tree.idTree AS id,tree.parent AS pid,tree.idTree AS title,tree.layer,tree.userId,tree.other1 as img,tree.`status`,`user`.email,uservalue.`value` AS `name` FROM tree INNER JOIN `user` ON `user`.idUser=tree.userId INNER JOIN uservalue ON uservalue.userId=`user`.idUser WHERE uservalue.keyId=2 AND tree.parent= " + el4.id, (e5, r5, f) => {
+                                                                    if (!e5) {
+                                                                        r5.forEach(el5 => {
+                                                                            arr.push(el5);
+                                                                            // level 6
+                                                                            mycon.execute("SELECT tree.idTree AS id,tree.parent AS pid,tree.idTree AS title,tree.layer,tree.userId,tree.other1 as img,tree.`status`,`user`.email,uservalue.`value` AS `name` FROM tree INNER JOIN `user` ON `user`.idUser=tree.userId INNER JOIN uservalue ON uservalue.userId=`user`.idUser WHERE uservalue.keyId=2 AND tree.parent= " + el5.id, (e6, r6, f) => {
+                                                                                if (!e6) {
+                                                                                    r6.forEach(el6 => {
+                                                                                        arr.push(el6);
+                                                                                        // level 7
+                                                                                        mycon.execute("SELECT tree.idTree AS id,tree.parent AS pid,tree.idTree AS title,tree.layer,tree.userId,tree.other1 as img,tree.`status`,`user`.email,uservalue.`value` AS `name` FROM tree INNER JOIN `user` ON `user`.idUser=tree.userId INNER JOIN uservalue ON uservalue.userId=`user`.idUser WHERE uservalue.keyId=2 AND tree.parent= " + el6.id, (e7, r7, f) => {
+                                                                                            if (!e7) {
+                                                                                                r7.forEach(el7 => {
+                                                                                                    arr.push(el7);
+                                                                                                    // level 8
+                                                                                                    mycon.execute("SELECT tree.idTree AS id,tree.parent AS pid,tree.idTree AS title,tree.layer,tree.userId,tree.other1 as img,tree.`status`,`user`.email,uservalue.`value` AS `name` FROM tree INNER JOIN `user` ON `user`.idUser=tree.userId INNER JOIN uservalue ON uservalue.userId=`user`.idUser WHERE uservalue.keyId=2 AND tree.parent= " + el7.id, (e8, r8, f) => {
+                                                                                                        if (!e8) {
+                                                                                                            r8.forEach(el8 => {
+                                                                                                                arr.push(el8);
+                                                                                                                // level 9
+                                                                                                                mycon.execute("SELECT tree.idTree AS id,tree.parent AS pid,tree.idTree AS title,tree.layer,tree.userId,tree.other1 as img,tree.`status`,`user`.email,uservalue.`value` AS `name` FROM tree INNER JOIN `user` ON `user`.idUser=tree.userId INNER JOIN uservalue ON uservalue.userId=`user`.idUser WHERE uservalue.keyId=2 AND tree.parent= " + el8.id, (e9, r9, f) => {
+                                                                                                                    if (!e9) {
+                                                                                                                        r9.forEach(el9 => {
+                                                                                                                            arr.push(el9);
+
+                                                                                                                            // level 10
+                                                                                                                            mycon.execute("SELECT tree.idTree AS id,tree.parent AS pid,tree.idTree AS title,tree.layer,tree.userId,tree.other1 as img,tree.`status`,`user`.email,uservalue.`value` AS `name` FROM tree INNER JOIN `user` ON `user`.idUser=tree.userId INNER JOIN uservalue ON uservalue.userId=`user`.idUser WHERE uservalue.keyId=2 AND tree.parent= " + el9.id, (e10, r10, f) => {
+                                                                                                                                if (!e10) {
+                                                                                                                                    r10.forEach(el10 => {
+                                                                                                                                        arr.push(el10);
+                                                                                                                                    });
+                                                                                                                                } else {
+                                                                                                                                    console.log(e10);
+                                                                                                                                }
+                                                                                                                            });//============= level 10
+                                                                                                                        });
+                                                                                                                    } else {
+                                                                                                                        console.log(e9);
+                                                                                                                    }
+                                                                                                                });//============= level 9
+                                                                                                            });
+                                                                                                        } else {
+                                                                                                            console.log(e8);
+                                                                                                        }
+                                                                                                    });//============= level 8
+
+                                                                                                });
+                                                                                            } else {
+                                                                                                console.log(e7);
+                                                                                            }
+                                                                                        });//============= level 7
+                                                                                    });
+                                                                                } else {
+                                                                                    console.log(e6);
+                                                                                }
+                                                                            });//============= level 6
+                                                                        });
+                                                                    } else {
+                                                                        console.log(e5);
+                                                                    }
+                                                                });//============= level 5
+                                                            });
+                                                        } else {
+                                                            console.log(e4);
+                                                        }
+                                                    });//============= level 4
+                                                });
+                                            } else {
+                                                console.log(e3);
+                                            }
+                                        });//============= level 3
+                                    });
+                                } else {
+                                    console.log(e2);
+                                }
+                            });//============= level 2   
+                        });
+
+                    } else {
+                        console.log(e1);
+                    }
+                });//============= level 1
             } else {
                 console.log(e)
             }
         });
+        setTimeout(function () { res.send(arr); }, 1000);
+
     } catch (error) {
         console.log(error);
         return res.status(500).send(error);

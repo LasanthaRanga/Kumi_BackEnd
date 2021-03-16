@@ -196,7 +196,7 @@ exports.afterActive = (req, res, next) => {
                 let deler = rows[0].deler;
                 let tid = rows[0].iduser;
 
-                let qq = "UPDATE `tree` SET `status`=1,`string1`='" + req.body.idadv + "',`string2`='" + day + "' WHERE `idTree`=" + tid;
+                let qq = "UPDATE `tree` SET `status`=1,`string1`='" + req.body.idadv + "',`string2`='" + day + "', `other1`='/assets/images/loadingRound.svg' WHERE `idTree`=" + tid;
 
                 mycon.execute(qq, (e, r, f) => {
                     if (!e) {
